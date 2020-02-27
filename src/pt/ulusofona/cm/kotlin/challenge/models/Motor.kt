@@ -16,4 +16,8 @@ class Motor(val cavalos: Int, val cilindrada: Int) : Ligavel {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
+    override fun toString(): String {
+        return "Motor | $cavalos | $cilindrada"
+    }
+
 }

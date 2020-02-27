@@ -1,4 +1,9 @@
 package pt.ulusofona.cm.kotlin.challenge.models
 
-class Bicicleta(val identificador: String) : Veiculo(identificador){
+class Bicicleta(identificador: String) : Veiculo(identificador){
+
+    override fun toString(): String {
+        return "Bicicleta | $identificador"
+    }
+
 }
