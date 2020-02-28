@@ -2,5 +2,9 @@ package pt.ulusofona.cm.kotlin.challenge.exceptions
 
 import java.lang.Exception
 
-class PessoaSemCartaException(message: String) : Exception(message) {
+/*$Pessoa.nome não tem carta*/
+class PessoaSemCartaException(message: String ) : Exception(message) {
+    init {
+        printStackTrace()
+    }
 }
