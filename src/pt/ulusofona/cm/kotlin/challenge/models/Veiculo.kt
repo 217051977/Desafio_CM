@@ -1,15 +1,15 @@
 package pt.ulusofona.cm.kotlin.challenge.models
 
-import java.util.*
+import pt.ulusofona.cm.kotlin.challenge.interfaces.Movimentavel
 
-open class Veiculo
-private constructor(val identificador: String, var posicao: Posicao, var dataDeAquisicao: Date) {
+abstract class Veiculo
+(val identificador: String, var posicao: Posicao = Posicao(), var dataDeAquisicao: Data = Data()) : Movimentavel {
 
-    constructor(identificador: String): this(identificador, posicao = Posicao(), dataDeAquisicao = Date())
+    abstract fun requerCarta(): Boolean
 
     override fun toString(): String {
 
-        return "Veiculo | $identificador | $dataDeAquisicao | $posicao"
+        return "${this.javaClass.simpleName} | $identificador | $dataDeAquisicao | $posicao"
 
     }
 
