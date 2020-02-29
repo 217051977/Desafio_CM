@@ -21,8 +21,12 @@ open class Veiculo
     }
 
     override fun toString(): String {
+        val day: Int = dataDeAquisicao.date
+        val month: Int = dataDeAquisicao.month
         return "${this.javaClass.simpleName} | $identificador | " +
-                "${dataDeAquisicao.date}-${dataDeAquisicao.month}-${dataDeAquisicao.year} | $posicao"
+                "${if (day.toString().length == 1){"0${day}"} else {"$day"}}-" +
+                "${if (month.toString().length == 1){"0${month + 1}"} else {"${month+1}"}}-" +
+                "${dataDeAquisicao.year + 1900} | $posicao"
     }
 
 }

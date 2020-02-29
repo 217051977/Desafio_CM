@@ -20,8 +20,8 @@ class Motor(val cavalos: Int, val cilindrada: Int) : Ligavel {
 
     override fun desligar() {
         try {
-            if (!ligado) {
-                ligado = true
+            if (ligado) {
+                ligado = false
             } else {
                 throw VeiculoDesligadoException()
             }
@@ -33,7 +33,7 @@ class Motor(val cavalos: Int, val cilindrada: Int) : Ligavel {
     }
 
     override fun toString(): String {
-        return "Motor | $cavalos | $cilindrada | $ligado"
+        return "Motor | $cavalos | $cilindrada"
     }
 
 }

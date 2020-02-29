@@ -12,31 +12,38 @@ class Pessoa(val nome: String, val dataDeNascimento: Date) : Movimentavel {
     var carta: Carta = Carta()
     var posicao: Posicao = Posicao()
 
-    private fun maiorDeIdade(date: Date): Boolean {
-        val dateToPass: Date = Date(dataDeNascimento.year + 12, dataDeNascimento.month, dataDeNascimento.date)
-        val _date: Date = Date()
-        val actualDate: Date = Date(_date.year + 1900, _date.month + 1, _date.date)
-        return actualDate.after(dateToPass)
+    private fun maiorDeIdade(): Boolean {
+        val dateToPass: Date = Date(dataDeNascimento.year + 12, dataDeNascimento.month, dataDeNascimento.date - 1)
+        val date: Date = Date()
+        return date.after(dateToPass)
     }
 
     private fun podeComprar(): Boolean {
         return try {
-            if (maiorDeIdade(Date())) {
-                throw MenorDeIdadeException("$nome é menor de idade")
-            } else {
+            if (maiorDeIdade()) {
                 true
+            } else {
+                throw MenorDeIdadeException("$nome é menor de idade")
             }
         } catch (menorDeIdade: MenorDeIdadeException){
             false
         }
     }
 
-    private fun podeConduzir(): Boolean {
+    private fun podeConduzir(veiculo: Veiculo?): Boolean {
         return try {
-            if (podeComprar() && carta.temCarta) {
-                true
+            if (veiculo != null) {
+                if (veiculo.requerCarta()) {
+                    if (maiorDeIdade() && temCarta()) {
+                        true
+                    } else {
+                        throw PessoaSemCartaException("$nome não tem carta para conduzir o veiculo indicado")
+                    }
+                } else {
+                    true
+                }
             } else {
-                throw PessoaSemCartaException("$nome não tem carta para conduzir o veiculo indicado")
+                false
             }
         } catch (semCarta: PessoaSemCartaException) {
             false
@@ -44,16 +51,17 @@ class Pessoa(val nome: String, val dataDeNascimento: Date) : Movimentavel {
     }
 
     fun pesquisarVeiculo(identificador: String): Veiculo? {
-        try {
+        return try {
             var _veiculo: Veiculo? = null
             for (veiculo in veiculos) {
-                if (veiculo.identificador == identificador) {
+                if (veiculo.identificador.equals(identificador)) {
                     _veiculo = veiculo
+                    break
                 }
             }
-            return _veiculo?: throw VeiculoNaoEncontradoException("O veiculo com o id $identificador não foi encontrado!")
+            _veiculo?: throw VeiculoNaoEncontradoException("O veiculo com o id $identificador não foi encontrado!")
         }catch (veiculoNaoEncontrado: VeiculoNaoEncontradoException){
-            return null
+            null
         }
     }
 
@@ -75,8 +83,9 @@ class Pessoa(val nome: String, val dataDeNascimento: Date) : Movimentavel {
     }
 
     fun moverVeiculoPara(identificador: String, x: Int, y: Int) {
-        if (podeConduzir()) {
-            pesquisarVeiculo(identificador)?.moverPara(x, y)
+        val veiculo = pesquisarVeiculo(identificador)
+        if (podeConduzir(veiculo)) {
+            veiculo?.moverPara(x, y)
         }
     }
 
@@ -95,9 +104,13 @@ class Pessoa(val nome: String, val dataDeNascimento: Date) : Movimentavel {
     }
 
     override fun toString(): String {
+        val day: Int = dataDeNascimento.date
+        val month: Int = dataDeNascimento.month
+
         return "${this.javaClass.simpleName} | $nome | " +
-                "${dataDeNascimento.date}-${dataDeNascimento.month}-${dataDeNascimento.year} | " +
-                "$veiculos | $carta | $posicao"
+                "${if (day.toString().length == 1){"0${day}"} else {"$day"}}-" +
+                "${if (month.toString().length == 1){"0${month + 1}"} else {"${month+1}"}}-" +
+                "${dataDeNascimento.year + 1900} | $posicao"
     }
 
 }

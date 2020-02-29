@@ -7,7 +7,7 @@ class Bicicleta(identificador: String) : Veiculo(identificador) {
     }
 
     override fun toString(): String {
-        return "${this.javaClass.simpleName} | $${super.toString()}"
+        return super.toString()
     }
 
 }
