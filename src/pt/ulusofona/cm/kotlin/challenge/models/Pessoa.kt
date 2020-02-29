@@ -12,23 +12,31 @@ class Pessoa(val nome: String, val dataDeNascimento: Data) : Movimentavel {
     var carta: Carta = Carta()
     var posicao: Posicao = Posicao()
 
-    fun comprarVeiculo(veiculo: Veiculo) {
-        try {
-            if (carta.temCarta) {
-                if (dataDeNascimento.menorDeIdade()) {
-                    throw MenoDeIdadeException("$nome é menor de idade!")
-                } else {
-                    veiculo.dataDeAquisicao = Data().newDate(Date())
-                    veiculos.add(veiculo)
-                }
+    private fun podeComprar(): Boolean {
+        return try {
+            if (dataDeNascimento.menorDeIdade()) {
+                throw MenoDeIdadeException("$nome é menor de idade")
             } else {
-                throw PessoaSemCartaException("$nome não tem carta!")
+                true
             }
-        } catch (pessoaSemCarta: PessoaSemCartaException) {
-        } catch (menorDeIdade: MenoDeIdadeException){}
+        } catch (menorDeIdade: MenoDeIdadeException){
+            false
+        }
     }
 
-    fun pesquisarVeiculo(identificador: String): Veiculo? {
+    private fun podeConduzir(): Boolean {
+        return try {
+            if (podeComprar() && carta.temCarta) {
+                true
+            } else {
+                throw PessoaSemCartaException("$nome não tem carta para conduzir o veiculo indicado")
+            }
+        } catch (semCarta: PessoaSemCartaException) {
+            false
+        }
+    }
+
+    private fun pesquisarVeiculo(identificador: String): Veiculo? {
         try {
             var _veiculo: Veiculo? = null
             for (veiculo in veiculos) {
@@ -42,16 +50,32 @@ class Pessoa(val nome: String, val dataDeNascimento: Data) : Movimentavel {
         }
     }
 
+    fun comprarVeiculo(veiculo: Veiculo) {
+        if (podeComprar()) {
+            veiculo.dataDeAquisicao = Data().newDate(Date())
+            veiculos.add(veiculo)
+        }
+    }
+
     fun venderVeiculo(identificador: String, comprador: Pessoa) {
         val veiculoParaVender: Veiculo? = pesquisarVeiculo(identificador)
 
         if (veiculoParaVender != null) {
             comprador.comprarVeiculo(veiculoParaVender)
         }
+        veiculos.remove(veiculoParaVender)
     }
 
     fun moverVeiculoPara(identificador: String, x: Int, y: Int) {
-        pesquisarVeiculo(identificador)?.moverPara(x, y)
+        if (podeConduzir()) {
+            pesquisarVeiculo(identificador)?.moverPara(x, y)
+        }
+    }
+
+    fun tirarCarta() {
+        if (podeComprar()) {
+            carta.tirarCarta()
+        }
     }
 
     override fun moverPara(x: Int, y: Int) {

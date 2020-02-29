@@ -1,9 +1,13 @@
 package pt.ulusofona.cm.kotlin.challenge.models
 
+import pt.ulusofona.cm.kotlin.challenge.exceptions.MenoDeIdadeException
+
 open class Carta(var temCarta: Boolean = false) {
 
     fun tirarCarta() {
-        temCarta = true
+        try {
+            temCarta = true
+        } catch (menorDeIdade: MenoDeIdadeException) {}
     }
 
     fun perderCarta() {
