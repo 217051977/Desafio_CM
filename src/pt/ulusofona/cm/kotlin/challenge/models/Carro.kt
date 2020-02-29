@@ -2,9 +2,7 @@ package pt.ulusofona.cm.kotlin.challenge.models
 
 import pt.ulusofona.cm.kotlin.challenge.exceptions.VeiculoDesligadoException
 
-class Carro(identificador: String, val _motor: Motor) : Veiculo(identificador) {
-
-    val motor get() = _motor
+class Carro(identificador: String, val motor: Motor) : Veiculo(identificador) {
 
     override fun moverPara(x: Int, y: Int) {
         try {
@@ -18,7 +16,7 @@ class Carro(identificador: String, val _motor: Motor) : Veiculo(identificador) {
     }
 
     override fun toString(): String {
-        return "${this.javaClass.simpleName} | ${super.toString()} | $_motor"
+        return "${this.javaClass.simpleName} | ${super.toString()} | $motor"
     }
 
 }

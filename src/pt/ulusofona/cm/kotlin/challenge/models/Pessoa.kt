@@ -1,25 +1,32 @@
 package pt.ulusofona.cm.kotlin.challenge.models
 
-import pt.ulusofona.cm.kotlin.challenge.exceptions.MenoDeIdadeException
+import pt.ulusofona.cm.kotlin.challenge.exceptions.MenorDeIdadeException
 import pt.ulusofona.cm.kotlin.challenge.exceptions.PessoaSemCartaException
 import pt.ulusofona.cm.kotlin.challenge.exceptions.VeiculoNaoEncontradoException
 import pt.ulusofona.cm.kotlin.challenge.interfaces.Movimentavel
 import java.util.*
 
-class Pessoa(val nome: String, val dataDeNascimento: Data) : Movimentavel {
+class Pessoa(val nome: String, val dataDeNascimento: Date) : Movimentavel {
 
     var veiculos: MutableList<Veiculo> = mutableListOf()
     var carta: Carta = Carta()
     var posicao: Posicao = Posicao()
 
+    private fun maiorDeIdade(date: Date): Boolean {
+        val dateToPass: Date = Date(dataDeNascimento.year + 12, dataDeNascimento.month, dataDeNascimento.date)
+        val _date: Date = Date()
+        val actualDate: Date = Date(_date.year + 1900, _date.month + 1, _date.date)
+        return actualDate.after(dateToPass)
+    }
+
     private fun podeComprar(): Boolean {
         return try {
-            if (dataDeNascimento.menorDeIdade()) {
-                throw MenoDeIdadeException("$nome é menor de idade")
+            if (maiorDeIdade(Date())) {
+                throw MenorDeIdadeException("$nome é menor de idade")
             } else {
                 true
             }
-        } catch (menorDeIdade: MenoDeIdadeException){
+        } catch (menorDeIdade: MenorDeIdadeException){
             false
         }
     }
@@ -36,7 +43,7 @@ class Pessoa(val nome: String, val dataDeNascimento: Data) : Movimentavel {
         }
     }
 
-    private fun pesquisarVeiculo(identificador: String): Veiculo? {
+    fun pesquisarVeiculo(identificador: String): Veiculo? {
         try {
             var _veiculo: Veiculo? = null
             for (veiculo in veiculos) {
@@ -52,7 +59,8 @@ class Pessoa(val nome: String, val dataDeNascimento: Data) : Movimentavel {
 
     fun comprarVeiculo(veiculo: Veiculo) {
         if (podeComprar()) {
-            veiculo.dataDeAquisicao = Data().newDate(Date())
+            val _date: Date = Date()
+            veiculo.dataDeAquisicao = Date(_date.year + 1900, _date.month + 1, _date.date)
             veiculos.add(veiculo)
         }
     }
@@ -78,12 +86,18 @@ class Pessoa(val nome: String, val dataDeNascimento: Data) : Movimentavel {
         }
     }
 
+    fun temCarta(): Boolean {
+        return carta.temCarta()
+    }
+
     override fun moverPara(x: Int, y: Int) {
         posicao.alterarPosicao(x, y)
     }
 
     override fun toString(): String {
-        return "${this.javaClass.simpleName} | $veiculos | $carta | $posicao"
+        return "${this.javaClass.simpleName} | $nome | " +
+                "${dataDeNascimento.date}-${dataDeNascimento.month}-${dataDeNascimento.year} | " +
+                "$veiculos | $carta | $posicao"
     }
 
 }
