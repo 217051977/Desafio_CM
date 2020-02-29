@@ -2,12 +2,16 @@ package pt.ulusofona.cm.kotlin.challenge.models
 
 open class Carta(var temCarta: Boolean = false) {
 
-    fun adicionarCarta() {
+    fun tirarCarta() {
         temCarta = true
     }
 
-    fun removerCarta() {
+    fun perderCarta() {
         temCarta = false
+    }
+
+    fun temCarta(): Boolean {
+        return temCarta
     }
 
     override fun toString(): String {

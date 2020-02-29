@@ -4,6 +4,13 @@ import java.util.*
 
 class Data(var dia: Int = 1, var mes: Int = 2, var ano: Int = 2020) : Date() {
 
+    fun newDate(date: Date): Data {
+        val day: Int = date.date
+        val month: Int = date.month + 1
+        val year: Int = date.year + 1900
+        return Data(day, month, year)
+    }
+
     fun menorDeIdade(): Boolean {
         val actualYear: Int = Date().year + 1900
         val actualMonth: Int = Date().month + 1
