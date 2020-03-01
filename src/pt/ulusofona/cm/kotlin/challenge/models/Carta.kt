@@ -24,6 +24,10 @@ open class Carta {
         return temCarta
     }
 
+    override fun equals(other: Any?): Boolean {
+        return toString() == other.toString()
+    }
+
     override fun toString(): String {
         return "${this.javaClass.simpleName}: $temCarta"
     }

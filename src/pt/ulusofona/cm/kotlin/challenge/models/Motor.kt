@@ -32,6 +32,10 @@ class Motor(val cavalos: Int, val cilindrada: Int) : Ligavel {
         return ligado
     }
 
+    override fun equals(other: Any?): Boolean {
+        return toString() == other.toString()
+    }
+
     override fun toString(): String {
         return "Motor | $cavalos | $cilindrada"
     }

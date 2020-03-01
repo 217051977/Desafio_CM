@@ -20,6 +20,10 @@ open class Veiculo
         posicao.alterarPosicao(x, y)
     }
 
+    override fun equals(other: Any?): Boolean {
+        return toString() == other.toString()
+    }
+
     override fun toString(): String {
         val day: Int = dataDeAquisicao.date
         val month: Int = dataDeAquisicao.month

@@ -16,13 +16,10 @@ class Carro(identificador: String, val motor: Motor) : Veiculo(identificador) {
                 motor.desligar()
             }
         }
-//        try {
-//            if (motor.estaLigado()) {
-//                super.moverPara(x, y)
-//            } else {
-//                throw VeiculoDesligadoException()
-//            }
-//        } catch (veiculoDesligado: VeiculoDesligadoException){}
+    }
+
+    override fun equals(other: Any?): Boolean {
+        return toString() == other.toString()
     }
 
     override fun toString(): String {

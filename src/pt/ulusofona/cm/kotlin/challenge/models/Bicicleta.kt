@@ -6,8 +6,4 @@ class Bicicleta(identificador: String) : Veiculo(identificador) {
         return false
     }
 
-    override fun toString(): String {
-        return super.toString()
-    }
-
 }
