@@ -1,5 +1,6 @@
 package pt.ulusofona.cm.kotlin.challenge.models
 
+import pt.ulusofona.cm.kotlin.challenge.exceptions.AlterarPosicaoException
 import pt.ulusofona.cm.kotlin.challenge.exceptions.MenorDeIdadeException
 import pt.ulusofona.cm.kotlin.challenge.exceptions.PessoaSemCartaException
 import pt.ulusofona.cm.kotlin.challenge.exceptions.VeiculoNaoEncontradoException
@@ -83,9 +84,24 @@ class Pessoa(val nome: String, val dataDeNascimento: Date) : Movimentavel {
     }
 
     fun moverVeiculoPara(identificador: String, x: Int, y: Int) {
-        val veiculo = pesquisarVeiculo(identificador)
-        if (podeConduzir(veiculo)) {
-            veiculo?.moverPara(x, y)
+        var veiculoDescoberto: Boolean = false
+        val veiculoPedido = pesquisarVeiculo(identificador)
+
+        for (veiculo in veiculos) {
+            if (veiculo.posicao.equals(Posicao(x, y))) {
+                veiculoDescoberto = true
+                break
+            }
+        }
+
+        if (podeConduzir(veiculoPedido) && !veiculoDescoberto) {
+            try {
+                if (!veiculoDescoberto) {
+                    veiculoPedido?.moverPara(x, y)
+                } else {
+                    throw AlterarPosicaoException("Já existe um veiculo na posição ($x,$y)")
+                }
+            } catch (posicaoOcupada: AlterarPosicaoException) {}
         }
     }
 
